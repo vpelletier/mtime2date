@@ -1,0 +1,15 @@
+[Unit]
+Description=Set system date from file modification time
+# /bin: sh, date
+# /usr/bin: stat
+# /usr/local/sbin: executing script from there
+# /var/log: stat'ing files from there
+RequiresMountsFor=/var/log /usr/local/sbin /usr/bin /bin
+DefaultDependencies=false
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/mtime2date /var/log /var/log/syslog /var/log/daemons.log
+
+[Install]
+WantedBy=systemd-remount-fs.service 

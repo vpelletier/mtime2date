@@ -1,0 +1,14 @@
+#!/bin/sh
+EPOCH=0
+for FILE in "$@"; do
+  if [ -r "$(dirname "$FILE")" ]; then
+    FILE_EPOCH=$(stat --printf %Y "$FILE")
+    if [ "$FILE_EPOCH" -gt $EPOCH ]; then
+      EPOCH=$FILE_EPOCH
+    fi
+  fi
+done
+if [ $EPOCH -ge $(date +%s) ]; then
+  echo -n "Setting date to "
+  exec date -s @$EPOCH
+fi
